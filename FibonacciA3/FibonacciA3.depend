@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1669635069 source:d:\documants\stumtf\it\fibonaccia3\main.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<stdbool.h>
+

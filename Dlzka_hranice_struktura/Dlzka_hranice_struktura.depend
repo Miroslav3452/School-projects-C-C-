@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1673607779 source:d:\documants\stumtf\it\dlzka_hranice_struktura\main.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+
