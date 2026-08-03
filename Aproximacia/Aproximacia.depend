@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1682965930 source:d:\documants\stumtf\it\aproximacia\main.cpp
+	<iostream>
+	<iomanip>
+	<math.h>
+	<string.h>
+
