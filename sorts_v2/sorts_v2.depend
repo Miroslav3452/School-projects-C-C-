@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1681830756 source:d:\documants\stumtf\it\sorts_v2\main.cpp
+	<iostream>
+	<cstdlib>
+	<time.h>
+
+1682285253 source:d:\documants\stumtf\it\sorts_v2\main_v2.cpp
+	<iostream>
+	<cstdlib>
+	<time.h>
+

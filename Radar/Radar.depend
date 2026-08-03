@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1680268633 source:d:\documants\stumtf\it\radar\main.cpp
+	<iostream>
+	<stdlib.h>
+	<string.h>
+
