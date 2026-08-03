@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1682345848 source:d:\documants\stumtf\it\hladanie_nulovych_miest_polynomu\main.cpp
+	<iostream>
+	<math.h>
+	<iomanip>
+

@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1682151297 source:d:\documants\stumtf\it\mnozina_znakov\main.cpp
+	<iostream>
+	<string.h>
+
