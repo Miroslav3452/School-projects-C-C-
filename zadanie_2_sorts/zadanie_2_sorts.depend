@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1681591665 source:d:\documants\stumtf\it\zadanie_2_sorts\main.cpp
+	<iostream>
+	<cstdlib>
+	<time.h>
+
+1681831498 source:d:\documants\stumtf\it\2.semester\zadanie_2_sorts\main.cpp
+	<iostream>
+	<cstdlib>
+	<time.h>
+	"QuickSort.h"
+	"HeapSort.h"
+
+1681828487 source:d:\documants\stumtf\it\2.semester\zadanie_2_sorts\heapsort.cpp
+	<iostream>
+
+1681828504 source:d:\documants\stumtf\it\2.semester\zadanie_2_sorts\quicksort.cpp
+	<iostream>
+
+1681828487 d:\documants\stumtf\it\2.semester\zadanie_2_sorts\quicksort.h
+
+1681828563 d:\documants\stumtf\it\2.semester\zadanie_2_sorts\heapsort.h
+

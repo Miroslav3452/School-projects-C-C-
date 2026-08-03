@@ -1,0 +1,489 @@
+% !TeX root = main.tex
+\documentclass[12pt]{article}
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{fontenc}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{mathptmx}
+\usepackage{minted}
+%\usemintedstyle{colorful}
+%\usepackage{geometry}
+ % \geometry{
+   %   a4paper,
+    %  total={170mm,247mm},
+     %  left=20mm,
+      % right=20mm,
+  %}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{pgfplotstable}
+\usepackage{booktabs}
+\usepackage{pgfplots}
+\pgfplotsset{width = 10cm, compat=1.18}
+\usepackage{textcomp}
+\usepackage{fancyhdr}
+\usepackage{svg}
+\usepackage{multirow}
+\usepackage{lipsum}%% a garbage package you don't need except to create examples.
+\usepackage[utf8]{inputenc}
+\usepackage{svg}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{colortbl}
+\definecolor{myGrey}{rgb}{0.85,0.85,0.85}
+\definecolor{lightblue}{rgb}{0.88,0.92,1}
+
+%\graphicspath{ {figures/} }
+\setlength{\arrayrulewidth}{0.3mm}
+%\setlength{\tabcolsep}{5pt}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+\title{Zadanie 3}
+
+\author{Miroslav Vasaráb}
+\date{May 2023}
+
+\begin{document}
+
+
+\thispagestyle{empty}
+
+    \begin{figure}
+        \centering
+        \vspace{15em}
+        \includegraphics[width=0.5\textwidth]{logo17.jpg}
+    \end{figure}
+    \hfill
+    \vspace{8em}
+
+    \begin{center}
+        \section*{\textbf{Zadanie 3}}
+        \subsection*{\textbf{Numerické algoritmy}}
+    \end{center}
+
+\newpage
+
+    \pagestyle{fancy}
+    \setlength{\headheight}{3em}
+    \chead{Materiálovotechnologická fakulta \par so sídlom v Trnave}
+    \lhead{Programovacie \par jazyky}
+    \rhead{AIA \par}
+
+    \cfoot{}
+    \lfoot{Miroslav Vasaráb \par 1.ročník / DKM}
+    \rfoot{2022/2023}
+    \renewcommand{\headrulewidth}{0.2pt}
+    \renewcommand{\footrulewidth}{0.2pt}
+
+
+
+\section{\underline{Zadanie}}
+\begin{justify}
+    
+
+    Aplikácia algoritmov numerickej interpolácie pre množinu bodov v 2D rovine.
+    Použitie algoritmu Lagrangeovej interpolácie na výpočet hodnôt mimo vstupných bodov na
+    intervale I. Vstupné body pre Lagrangoevu interpoláciu získané zo zadania č. 2 (algoritmy
+    triedenia), kde je použitá tabuľka nameraných časov pre zadaný triediaci algoritmus. Hodnoty na osi \textbf{x} sú veľkosti triedeného poľa (n) zo zadania 2, a os \textbf{y} sú namerané časy.
+    \\
+    \\
+    Namerané hodnoty časov sú použité z algoritmu triedenia \textbf{Heap sort.}
+\end{justify}    
+
+\section{\underline{Analýza metódy}}
+\begin{justify}
+    
+
+    Lagrangeova interpolácia je numerická metóda používaná na aproximáciu neznámych hodnôt funkcie na základe známych hodnôt v určitých bodoch. Úlohou aproximácie funkcie je nahradenie reálnej funkcie\hspace{0.4cm} $\textbf{\textit{f : A}} \to \mathbb{R}$ \hspace{0.4cm}pomocou funkcie $ \hspace{0.4cm}\textbf{\textit{g : A}} \subseteq \textbf{\textit{B}} \to \mathbb{R}$\hspace{0.4cm}za predpokladu, že musia mať rovnaké fukčné hodnoty v známych \textbf{\textit{n} + 1} rôznych bodoch 
+    \textbf{\textit{$x_0,x_1,ldots,x_n$}}. Tieto hodnoty môžu byť napríklad výsledkom merania. Dôvodom aproximácie funkcie je zvyčajne neznalosť presného predpisu funkcie \textbf{\textit{f(x)}} alebo naopak príliš zložitý predpis pre ďalšie použitie. Lagrangeov interpolačný polynóm nahradzuje reálnu funkciu \textbf{\textit{f(x)}} polynómom tak, aby sa zachovali rovnaké funkčné hodnoty v známych rôznych bodoch.  \\
+\end{justify}
+   
+    
+    
+ \begin{justify}   
+    Predpokladajme, že máme \textbf{\textit{n} + 1} hodnôt \textbf{\textit{$f(x_0),f(x_1),ldots,f(x_n)$}} 
+    funkcie \textbf{\textit{f(x)}} v rôznych bodoch\\ \textbf{\textit{$x_0,x_1,ldots,x_n$}} na intervale $\langle$\textbf{\textit{a,b}}$\rangle$. Pomocou bodov \textbf{\textit{$x_i$}}, ktoré nazývame aj uzlové body, definujeme Lagrangeove bázické polynómy $\ell_i(x)$ v tvare:
+\end{justify}
+    
+        \[\ell_j(x) = \frac{(x - x_0)\cdots(x - x_{j-1})(x - x_{j+1})\cdots(x - x_n)}{(x_j - x_0)\cdots(x_j - x_{j-1})(x_j - x_{j+1})\cdots(x_j - x_n)},\hspace{0.4cm} pre \hspace{0.4cm}\textbf{\textit{j}} = 0,1, ... ,\textbf{\textit{n}}.\] 
+      \\
+    resp. v skrátenej forme:
+
+        \[\ell_j(x) = \prod _{i=0,\,i\neq j}^{n}\frac{x-x_i}{x_j-x_i}\]
+    \\
+    Lagrangeov interpolačný polynóm $n$ - tého stupňa definujeme:
+
+        \[L(x):=\sum _{j=0}^{n}y_{j}\ell _{j}(x)\]
+    Táto metóda sa teda používa na vypočítanie funkčných hodnôt bodov vo vnútri vstupného intervalu funkcie, pre ktoré túto hodnotu nepoznáme.   
+\newpage   
+\section{\underline{Zdrojové kódy}}
+%\subsection*{Funkcia na výpočet interpolovaných bodov v Lagrageovom tvare}
+   %\begin{listing}[!ht]
+
+      % \begin{minted}{cpp}
+\lstset{ % nastavenie farebného zvýraznenia pre jazyk C++
+  language=C++,
+  basicstyle=\small\ttfamily,
+  keywordstyle=\color{blue}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  commentstyle=\color{gray}\ttfamily,
+  morecomment=[l][\color{magenta}]{\#},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  showstringspaces=false
+}
+\begin{lstlisting}[caption=Funkcia Lagrange Interpol, basicstyle=\ttfamily\small,language=C++] 
+
+// vypocet hodnoty interpolacneho polynomu v Lagrangeovom tvare v bode x
+double LagrangeInterpol(int *data_x, double *data_y, int n, double x)
+{
+    double lag,lag_pol=0;
+    int j,i;
+    for(j=0; j<n; j++)
+    {
+        lag=1.0;
+        for(i=0; i<n; i++)
+        {
+            if(i == j) continue;
+            // vypocet Lagrangeoveho bazoveho polynomu
+            lag *= (x - data_x[i]) / (data_x[j] - data_x[i]) ; 
+        }
+        lag_pol += data_y[j] * lag; // vysledna suma bazovych polynomov
+    }
+    return lag_pol;
+}    
+\end{lstlisting} 
+      % \end{minted}
+  % \end{listing}
+ 
+%\subsection*{Funkcia Heapify}
+ %   \begin{listing}[!h]
+    
+  %      \begin{minted}{cpp}
+  \begin{listing}[language=C++, caption=Funkcia Heapify]
+      
+  
+void heapfy(int data[], int N, int i)
+{
+    int naj = i;
+    int lavy = 2*i + 1;
+    int pravy = 2*i + 2;
+
+    if(lavy < N && data[lavy] > data[naj])
+    {
+        naj = lavy;
+    }
+    if(pravy < N && data[pravy] > data[naj])
+    {
+        naj = pravy;
+    }
+    if(naj != i)
+    {
+        swap(data[i], data[naj]);
+        heapfy(data, N, naj);
+    }
+}  
+        
+\end{lstlisting}
+ \newpage
+%\subsection*{Funkcia Heap sort}
+ %   \begin{listing}[!h]
+  %      \begin{minted}{cpp}
+   \begin{lstlisting}[language=C++, caption=Funkcia Heap sort]
+void HeapSort(int data[], int N)
+{
+    for(int i = N/2 - 1; i >= 0; i--)
+    {
+        heapfy(data, N, i);
+    }
+    for(int i = N - 1; i > 0; i--)
+    {
+        swap(data[0], data[i]);
+        heapfy(data, i, 0);
+    }
+}
+\end{lstlisting}
+   %     \end{minted}       
+    %\end{listing}   
+%\newpage
+%\subsection*{Funkcia Check}
+ %   \begin{listing}[!h]
+  %      \begin{minted}{cpp}
+  \begin{lstlisting}[language=C++, caption=Funkcia Check]
+// funkcia na overenie zoradenia pola
+bool Check(int data[], int n)
+{
+    for(int i = 0; i < n - 2; i++)
+    {
+        if(data[i+1] < data[i])
+            return false;
+    }
+    return true;
+}            
+\end{lstlisting}
+    %    \end{minted}   
+    %\end{listing}
+    
+%\subsection*{Funkcia main()}
+ %   \begin{listing}[!h]
+  %      \begin{minted}{cpp}
+  \begin{lstlisting}[language=C++, caption=Funkcia main ()]
+int main()
+{
+    const int m = 10;
+    // vstupne hodnoty pre vypocet interpolovanych bodov
+    int x_inp[] = {1000000, 2000000, 3000000, 4000000, 5000000, 6000000, 7000000, 8000000, 9000000, 10000000};
+    double y_inp[] = {0.016, 0.031, 0.048, 0.064, 0.08, 0.099, 0.149, 0.157, 0.184, 0.202};
+
+    cout<<fixed<<setprecision(3);
+
+    for(int i=0; i<m; i++)
+    {
+        cout<<x_inp[i]<<" "<<y_inp[i]<<endl;
+    }
+    // nastavenie kroku
+    int step = (x_inp[m-1] - x_inp[0]) / (6*m);
+    int n = 6*m + 20;
+    int f = x_inp[0] - (10*step);
+
+
+    cout<<endl<<"Interpolated points"<<endl;
+
+    Points_p *lag_data = new Points_p[n];
+
+    for(int i=0; i<n; i++)
+    {
+        lag_data[i].x = f + (i*step);
+        lag_data[i].y = LagrangeInterpol(x_inp, y_inp, m, lag_data[i].x);
+        cout<<lag_data[i].x<<" "<<lag_data[i].y<<endl;
+    }
+    //Overenie presnosti interpolacie pokusnym meranim casov pomocou algoritmu treiedenia Heap sort
+    const int test = 5;
+    int wide_of_arr[test] = {925000, 1004000, 4852000, 9953000, 10125535};
+    for(int i=0; i<test; i++)
+    {
+        int *arr_Heap = new int[wide_of_arr[i]];
+
+        srand(time(NULL));
+        double time_heap = 0;
+        for(int j=0; j<3; j++)
+        {
+            for(int k=0; k < wide_of_arr[i]; k++)
+            {
+                arr_Heap[i] = rand();
+
+            }
+
+            clock_t t;
+            t = clock();
+            HeapSort(arr_Heap, wide_of_arr[i]);
+            t = clock() - t;
+            double tot_time = ((double)t)/CLOCKS_PER_SEC;
+            time_heap += tot_time;
+
+            bool check_Heap = Check(arr_Heap, n);
+
+            cout<<i+1<<". meranie HEAPSORT pre velkost pola "<<wide_of_arr[i]<<": "<<tot_time<<" s"<<endl;
+
+            if(check_Heap == false)
+            {
+                cout<<"ERORR";
+                cout<<endl;
+            }
+            else continue;
+        }
+        cout<<"Priemerny cas HEAPSORT: "<<time_heap/3<<endl;
+    delete[] arr_Heap;
+    }
+    delete[] lag_data;
+
+    return 0;
+}            
+   \end{lstlisting}
+       % \end{minted}     
+   % \end{listing}
+% \newpage   
+
+
+\section{\underline{Výsledky interpolácie}}
+\subsection*{Vstupné hodnoty pre interpoláciu z algoritmu Heap sort}
+   % \subsection*{Tabuľka nameraných hodnôt triediaceho algoritmu Heap sort}    
+
+    \begin{table}[!ht]  
+    \footnotesize    
+    \caption{Namerané hodnoty triediaceho algoritmu Heap sort}
+    \begin{tabularx}{\textwidth}{|p{2.1cm}|*{10}{>{\centering\arraybackslash}X|}}
+\hline
+\rowcolor{lightblue}
+\multicolumn{1}{|r|}{\textbf{n {[}mil{]}}} & \multirow[t]{2}{*}{\textbf{1}} & \multirow[t]{2}{*}{\textbf{2}} & \multirow[t]{2}{*}{\textbf{3}} & \multirow[t]{2}{*}{\textbf{4}} & \multirow[t]{2}{*}{\textbf{5}} & \multirow[t]{2}{*}{\textbf{6}} & \multirow[t]{2}{*}{\textbf{7}} & \multirow[t]{2}{*}{\textbf{8}} & \multirow[t]{2}{*}{\textbf{9}} & \multirow[t]{2}{*}{\textbf{10}} \\
+
+\cellcolor{myGrey}\textbf{séria} &\rowcolor{lightblue} & & & & & & & & & \\ 
+\hline
+\cellcolor{myGrey}\textbf{Mer. 1 {[}s{]}} & 0,017 & 0,033 & 0,051 & 0,067 & 0,084 & 0,11 & 0,159 & 0,163 & 0,214 & 0,216 \\ 
+\hline
+\cellcolor{myGrey}\textbf{Mer. 2 {[}s{]}} & 0,016 & 0,03 & 0,047 & 0,062 & 0,078 & 0,092 & 0,14 & 0,153 & 0,175 & 0,195 \\ 
+\hline
+\cellcolor{myGrey}\textbf{Mer. 3 {[}s{]}} & 0,015 & 0,031 & 0,046 & 0,062 & 0,078 & 0,094 & 0,148 & 0,153 & 0,164 & 0,194 \\ 
+\hline
+\cellcolor{myGrey}\textbf{Čas behu {[}s{]}} & \textbf{0,016} & \textbf{0,031} & \textbf{0,048} & \textbf{0,064} & \textbf{0,08} & \textbf{0,099} & \textbf{0,149} & \textbf{0,157} & \textbf{0,184} & \textbf{0,202} \\
+\hline
+\end{tabularx}
+\label{tab-Heap}
+\end{table} 
+
+
+
+\begin{center}   
+\resizebox{\linewidth}{!}{
+\tiny  
+\begin{tikzpicture}
+\begin{axis}[
+    height = 6cm,
+    axis lines = left,    
+    title = {Závislosť času zoradenia poľa od jeho veľkosti},
+    xlabel = {Počet prvkov [mil]},
+    ylabel = {Čas [s]},
+    xmin = 0, xmax = 10,
+    ymin = 0, ymax = 0.35,
+    xtick = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+    scaled ticks=true,
+    y tick label style={/pgf/number format/.cd, fixed, precision=3},
+    ytick = {0.050, 0.100, 0.150, 0.200, 0.250},
+    legend pos = north west,
+    ymajorgrids = true,
+    xmajorgrids = true,
+    grid style = dashed,
+]
+\addplot[
+    color = orange,
+    mark =*,
+    mark size = 0.8pt,
+    ]
+    coordinates {(1, 0.016) (2, 0.031) (3, 0.048) (4, 0.064) (5, 0.080) (6, 0.099) (7, 0.149) (8, 0.157) (9, 0.184) (10, 0.202)
+    };
+    \legend{Heap sort}
+\end{axis}
+\end{tikzpicture}
+}
+\end{center}
+\newpage
+
+\subsection*{Interpolované hodnoty}
+   % \subsection*{Tabuľka interpolovaných hodnôt Lagrangeouvou metódou}  
+\hypertarget{tab-lagrange}{}   
+\begin{table}[!ht]
+    \renewcommand{\arraystretch}{1.3} 
+    \centering
+    
+    %\begin{tabularx}{\textwidth}{|*{8}{>{\centering\arraybackslash}X|}}
+   \caption{Interpolované hodnoty Lagrangeouvou metódou}
+    \begin{tabular}{|c|c||c|c||c|c||c|c|}
+\hline
+\rowcolor{lightblue}
+\textbf{x {[}mil{]}} & \textbf{čas {[}s{]}} & \textbf{x {[}mil{]}} & \textbf{čas {[}s{]}} & \textbf{x {[}mil{]}} & \textbf{čas {[}s{]}} & \textbf{x {[}mil{]}} & \textbf{čas {[}s{]}} \\ 
+\hline 
+-0.5 & 10.016 & 2.5	& 0.047	& 5.5 & 0.086 & 8.5 & 0.150 \\ \hline
+-0.35 & 7.104 & 2.65 & 0.048 & 5.65 & 0.089	& 8.65 & 0.154 \\ \hline
+-0.2 & 4.930 & 2.8 & 0.048 & 5.8 & 0.092 & 8.8 & 0.163 \\ \hline
+-0.05 & 3.335 & 2.95 & 0.048 & 5.95 & 0.097 & 8.95 & 0.178 \\ \hline
+0.1	& 2.186 & 3.1 & 0.048 & 6.1 & 0.103 & 9.1 & 0.198 \\ \hline
+0.25 & 1.377 & 3.25 & 0.049 & 6.25 & 0.110 & 9.25 & 0.224 \\ \hline
+0.4 & 0.823 & 3.4 & 0.051 & 6.4 & 0.117 & 9.4 & 0.251 \\ \hline
+0.55 & 0.457 & 3.55 & 0.054 & 6.55 & 0.126 & 9.55 & 0.274 \\ \hline
+0.7	& 0.226 & 3.7 & 0.057 & 6.7 & 0.134 & 9.7 & 0.284 \\ \hline
+0.85 & 0.089 & 3.85	& 0.060 & 6.85 & 0.142 & 9.85 & 0.267 \\ \hline
+1 & 0.016 & 4 & 0.064 & 7 & 0.149 & 10 & 0.202 \\ \hline
+1.15 & -0.016 & 4.15 & 0.067 & 7.15 & 0.155	& 10.15 & 0.062 \\ \hline
+1.3 & -0.022 & 4.3 & 0.071 & 7.3 & 0.160 & 10.3 & -0.190 \\ \hline
+1.45 & -0.015 & 4.45 & 0.073 & 7.45 & 0.162 & 10.45 & -0.605 \\ \hline
+1.6 & -0.002 & 4.6 & 0.076 & 7.6 & 0.163 & 10.6 & -1.245 \\ \hline
+1.75 & 0.012 & 4.75  & 0.078 & 7.75 & 0.162 & 10.75 & -2.194 \\ \hline
+1.9 & 0.024	& 4.9 & 0.079 & 7.9 & 0.159	& 10.9 & -3.552 \\ \hline
+2.05 & 0.034 & 5.05 & 0.080 & 8.05 & 0.156 & 11.05 & -5.449 \\ \hline
+2.2 & 0.041	& 5.2 & 0.082 & 8.2 & 0.152	& 11.2 & -8.041 \\ \hline
+2.35 & 0.045 & 5.35 & 0.083 & 8.35 & 0.150 & 11.35 & -11.52 \\ \hline
+
+%\end{tabularx}
+\end{tabular}
+
+\end{table} 
+
+
+    
+
+
+    
+
+\begin{center}
+\resizebox{\linewidth}{!}{
+\begin{tikzpicture}
+\tiny
+\begin{axis}[
+    height = 8.5cm,
+    axis lines = left,    
+    title = {Graf interpolovných bodov vypočítaných Lagrangeovou interpoláciou},
+    xlabel = {Počet prvkov [mil]},
+    ylabel = {Interpolované hodnoty [s]},
+    xmin = -1, xmax = 12,
+    ymin = -12, ymax = 11,
+    scaled ticks=true,
+    tick label style={/pgf/number format/.cd, fixed, precision=3},
+    xtick = {-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12},
+    ytick = {-12, -10, -8, -6, -4, -2, 0, 2, 4, 6, 8, 10},
+    legend pos = north east,
+    ymajorgrids = true,
+    xmajorgrids = true,
+    grid style = dashed,
+]
+\addplot[
+    color = blue,
+    only marks,
+    mark =*,
+    mark size = 0.5pt,
+    ]
+    table[x=x, y=y, col sep = space] {lagrange.txt};
+
+    \legend{Interpolované body}
+
+\end{axis}
+\end{tikzpicture}
+}
+\end{center}
+
+
+\section{\underline{Záver}}
+    \normalsize
+Presnosť numerickej metódy interpolácie pomocou Lagrangeovho interpolačného polynómu je závislá na stupni vstupného polynómu. Pri vyšších stupňoch polynómu vznikajú odchýlky od pôvodnej funkcie vo vnútri intervalu. Toto potvrdzujú aj nami vypočítané hodnoty v tabuľke pre polynóm 9-teho stupňa (viď \hyperlink{tab-lagrange}{Tabuľka 2}).\\
+Pre hodnoty mimo intervalu interpolovanej funkcie chyba aproximácie rýchlo rastie, keď sa $x$ vzďaľuje od $x_0$ doľava alebo od $x_n$ doprava. Toto sme overili pokusným meraním časov pre hodnoty mimo intervalu interpolovanej funkcie a ich porovnaním s najbližšími interpolovanými hodnotami v tabuľke (\hyperlink{tab-porovnanie}{Tabuľka 3}). \\ \\
+\newpage
+%\subsection*{Porovnanie nameraných hodnôt s najbližšími interpolovanými hodnotami} 
+\hypertarget{tab-porovnanie}{}   
+\begin{table}[!h]
+\renewcommand{\arraystretch}{1.3} 
+\centering
+\caption{Porovnanie nameraných hodnôt s najbližšími interpolovanými hodnotami}
+\begin{tabular}{|cc||cc|}
+\hline
+\multicolumn{2}{|c||}{\textbf{Namerané hodnoty}}                   & \multicolumn{2}{c|}{\textbf{Interpolované hodnoty}}              \\ \hline
+\multicolumn{1}{|c|}{\textbf{n {[}mil{]}}} & \textbf{čas {[}s{]}} & \multicolumn{1}{c|}{\textbf{n {[}mil{]}}} & \textbf{čas {[}s{]}} \\ \hline
+\multicolumn{1}{|c|}{0.875}                & 0.014                & \multicolumn{1}{c|}{0.85}                 & 0.089                \\ \hline
+\multicolumn{1}{|c|}{1.18}                & 0.019                & \multicolumn{1}{c|}{1,15}                    & -0.016                \\ \hline
+\multicolumn{1}{|c|}{4.852}                & 0.078                & \multicolumn{1}{c|}{4.9}                  & 0.079                \\ \hline
+\multicolumn{1}{|c|}{9.875}                & 0.158                & \multicolumn{1}{c|}{9.85}                 & 0.267                \\ \hline
+\multicolumn{1}{|c|}{11.25}                & 0.192                & \multicolumn{1}{c|}{11.2}                 & -11.52               \\ \hline
+\end{tabular}
+
+\end{table}
+
+Z pokusného merania pre hodnoty ktoré neboli uzlové body je zrejmé, že interpolované hodnoty vo vnútri intervalu sa približujú reálnym hodnotám. Pri krajných bodoch intervalu je viditeľná nepresnosť interpolácie spôsobená vysokým stupňom polynómu. Extrapolované hodnoty mimo intervalu sa značne odkláňajú od nameraných hodnôt, čo potvrdzuje definíciu numerickej interpolácie pomocou Lagrangeovho polynómu.  
+ \begin{center}
+     Vytvorené v \LaTeX
+ \end{center}   
+\end{document}

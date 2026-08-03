@@ -1,0 +1,287 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath}
+\usepackage{geometry}
+  \geometry{
+      a4paper,
+      total={170mm,247mm},
+       left=20mm,
+       right=20mm,
+  }
+\usepackage{ragged2e}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{svg}
+\usepackage{multirow}
+\usepackage{lipsum}%% a garbage package you don't need except to create examples.
+\usepackage[utf8]{inputenc}
+\usepackage{svg}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+%\graphicspath{ {figures/} }
+
+            
+\title{Zadanie 2}
+
+\author{Miroslav Vasaráb}
+\date{April 2023}
+
+\begin{document}
+
+\thispagestyle{empty}
+
+    \begin{figure}
+        \centering
+        \vspace{15em}
+        \includegraphics[width=0.5\textwidth]{logo172.jpg}
+    \end{figure}
+    \hfill
+    \vspace{5em}
+
+    \begin{center}
+        \section*{Zadanie 2}
+        \subsection*{Quick sort  O(n log n)}
+        \subsection*{Heap sort  O(n log n)}
+        Osobné číslo: 121834
+    \end{center}
+
+\newpage
+
+    \pagestyle{fancy}
+    \setlength{\headheight}{3em}
+    \chead{Materiálovotechnologická fakulta \par so sídlom v Trnave}
+    \lhead{Programovacie \par jazyky}
+    \rhead{AIA \par}
+
+    \cfoot{}
+    \lfoot{Miroslav Vasaráb\par 1. ročník / DKM}
+    \rfoot{2022/2023}
+    \renewcommand{\headrulewidth}{0.2pt}
+    \renewcommand{\footrulewidth}{0.2pt}
+
+
+
+\section{\underline{Zadanie}}
+    \justifying
+    Porovnanie najviac efektívnosti dvoch zvolených algoritmov triedenia. Zhodnotenie, či sa teoretická zložitosť rovná empirickým výsledkom.
+    
+    \subsection*{Porovnávané algoritmy:}
+    \begin{itemize}
+        \item Quick sort - O(n log n)
+        \item Heap sort - O(n log n)
+    \end{itemize}
+
+
+
+\section{\underline{Analýza metód treidenia}}
+    \subsection*{Quick sort}
+    \subsection*{Heap sort}
+\section{\underline{Zdrojové kódy}}
+    \subsection*{Funkcia QuickSort}
+
+    \begin{lstlisting}
+void QuickSort(int data[],int left, int right)
+{
+    if(left < right)
+    {
+        int i = left, j = right;
+        // volba pivota na prostredny prvok pola
+        pivot = data[(left + right)/2 ]; 
+        do
+        {
+            while (data[i] < pivot) i++;
+            while (pivot < data[j]) j--;
+            if (i <= j)
+            {
+                swap(data[i], data[j]);
+                i++;
+                j--;
+            }
+        }
+        while (i <= j);
+        QuickSort(data, left, j);
+        QuickSort(data, i, right);
+    }
+}
+    
+    
+    \end{lstlisting}
+    
+    \subsection*{Funkcia Kopa}
+
+    \begin{lstlisting}
+void Kopa(int data[], int N, int i)
+{
+    int naj = i;
+    int lavy = 2*i + 1;
+    int pravy = 2*i + 2;
+
+    if(lavy < N && data[lavy] > data[naj])
+    {
+        naj = lavy;
+    }
+    if(pravy < N && data[pravy] > data[naj])
+    {
+        naj = pravy;
+    }
+    if(naj != i)
+    {
+        swap(data[i], data[naj]);
+        Kopa(data, N, naj);
+    }
+}
+    
+    
+    \end{lstlisting}
+
+    \subsection*{Funkcia HeapSort}
+
+    \begin{lstlisting}
+void HeapSort(int data[], int N)
+{
+    for(int i = N/2 - 1; i >= 0; i--)
+    {
+        Kopa(data, N, i);
+    }
+    for(int i = N - 1; i > 0; i--)
+    {
+        swap(data[0], data[i]);
+        Kopa(data, i, 0);
+    }
+}
+    
+    
+    \end{lstlisting}
+    
+    \subsection*{Funkcia Check}
+
+    \begin{lstlisting}
+bool Check(int data[], int n)
+{
+    for(int i = 0; i < n - 2; i++)
+    {
+        if(data[i+1] < data[i])
+            return false;
+    }
+    return true;
+}
+    
+    
+    \end{lstlisting}
+
+    
+    \subsection*{Funkcia main()}
+
+    \begin{lstlisting}
+int main()
+{
+    int n;
+    for(int j = 1; j <= 10; j++)
+    {
+        n = j * 1000000;
+        int *arr_Quick = new int[n];
+        int *arr_Heap = new int[n];
+
+        srand(time(NULL));
+        for(int k=0; k < n; k++)
+        {
+            *(arr_Quick+j) = rand();
+            *(arr_Heap+j) = *(arr_Quick+j);
+        }
+        double priemer_Quick = 0, priemer_Heap = 0;
+        for(int i = 0; i < 3; i++)
+        {
+            clock_t t;
+            t = clock();
+            QuickSort(arr_Quick, 0, n-1);
+            t = clock() - t;
+            double cas_celkom = ((double)t)/CLOCKS_PER_SEC;
+            priemer_Quick += cas_celkom;
+
+            bool okQuick = Check(arr_Quick, n);
+
+            cout<<i+1<<". meranie QUICKSORT pre velkost pola "<<n<<": "<<cas_celkom<<" s"<<endl;
+            if(okQuick)
+            {
+                cout<<"Zoradenie OK";
+            }
+            else
+            {
+                cout<<"ERORR";
+            }
+            cout<<endl;
+            t = clock();
+            HeapSort(arr_Heap, n);
+            t = clock() - t;
+            cas_celkom = ((double)t)/CLOCKS_PER_SEC;
+            priemer_Heap += cas_celkom;
+
+            bool okHeap = Check(arr_Heap, n);
+
+            cout<<i+1<<". meranie HEAPSORT pre velkost pola "<<n<<": "<<cas_celkom<<" s"<<endl;
+            if(okHeap)
+            {
+                cout<<"Zoradenie OK";
+            }
+            else
+            {
+                cout<<"ERORR";
+            }
+            cout<<endl;
+        }
+        cout<<"Priemerny cas QUICKSORT: "<<priemer_Quick/3<<endl;
+        cout<<"Priemerny cas HEAPSORT: "<<priemer_Heap/3<<endl;
+        cout<<endl;
+        delete []arr_Quick;
+        delete []arr_Heap;
+    }
+
+    return 0;
+}
+
+    
+    \end{lstlisting}
+\section{\underline{Overenie triediacich algoritmov}}
+    \begin{center}
+        \textbf{Tabuľky časov zoraďovacích algoritmov}
+    \end{center}
+    \subsection*{1. algoritmus Quick sort}
+    % Please add the following required packages to your document preamble:
+    % \usepackage{multirow}
+    
+        \begin{table}[!h]
+        \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+\multicolumn{1}{|r|}{\textbf{n {[}mil{]}}} & \multirow{2}{*}{\textbf{1}} & \multirow{2}{*}{\textbf{2}} & \multirow{2}{*}{\textbf{3}} & \multirow{2}{*}{\textbf{4}} & \multirow{2}{*}{\textbf{5}} & \multirow{2}{*}{\textbf{6}} & \multirow{2}{*}{\textbf{7}} & \multirow{2}{*}{\textbf{8}} & \multirow{2}{*}{\textbf{9}} & \multirow{2}{*}{\textbf{10}} \\ \cline{1-1}
+\textbf{séria} &  &    &                             &                             &                             &                             &                             &                             &                             &                              \\ 
+\hline
+\textbf{Mer. 1 {[}s{]}}                    & 0,091                       & 0,184                       & 0,287                       & 0,385                       & 0,503                       & 0,638                       & 0,874                       & 1,018                       & 1,116                       & 1,346                        \\ \hline
+\textbf{Mer. 2 {[}s{]}}                    & 0,088                       & 0,18                        & 0,285                       & 0,385                       & 0,498                       & 0,61                        & 0,917                       & 0,994                       & 1,299                       & 1,286                        \\ \hline
+\textbf{Mer. 3 {[}s{]}}                    & 0,087                       & 0,183                       & 0,289                       & 0,38                        & 0,502                       & 0,608                       & 0,996                       & 0,949                       & 1,131                       & 1,423                        \\ \hline
+\textbf{Čas behu {[}s{]}}                  & \textbf{0,089}              & \textbf{0,182}              & \textbf{0,287}              & \textbf{0,383}              & \textbf{0,501}              & \textbf{0,619}              & \textbf{0,929}              & \textbf{0,987}              & \textbf{1,182}              & \textbf{1,352}               \\ \hline
+\end{tabular}
+\end{table}
+
+    \subsection*{2. algoritmus Heap sort}
+
+        \begin{table}[!h]
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{1}{|r|}{\textbf{n {[}mil{]}}} & \multirow{2}{*}{\textbf{1}} & \multirow{2}{*}{\textbf{2}} & \multirow{2}{*}{\textbf{3}} & \multirow{2}{*}{\textbf{4}} & \multirow{2}{*}{\textbf{5}} & \multirow{2}{*}{\textbf{6}} & \multirow{2}{*}{\textbf{7}} & \multirow{2}{*}{\textbf{8}} & \multirow{2}{*}{\textbf{9}} & \multirow{2}{*}{\textbf{10}} \\ \cline{1-1}
+\textbf{séria}                             &                             &                             &                             &                             &                             &                             &                             &                             &                             &                              \\ \hline
+\textbf{Mer. 1 {[}s{]}}                    & 0,017                       & 0,033                       & 0,051                       & 0,067                       & 0,084                       & 0,11                        & 0,159                       & 0,163                       & 0,214                       & 0,216                        \\ \hline
+\textbf{Mer. 2 {[}s{]}}                    & 0,016                       & 0,03                        & 0,047                       & 0,062                       & 0,078                       & 0,092                       & 0,14                        & 0,153                       & 0,175                       & 0,195                        \\ \hline
+\textbf{Mer. 3 {[}s{]}}                    & 0,015                       & 0,031                       & 0,046                       & 0,062                       & 0,078                       & 0,094                       & 0,148                       & 0,153                       & 0,164                       & 0,194                        \\ \hline
+\textbf{Čas behu {[}s{]}}                  & \textbf{0,016}              & \textbf{0,031}              & \textbf{0,048}              & \textbf{0,064}              & \textbf{0,08}               & \textbf{0,099}              & \textbf{0,149}              & \textbf{0,157}              & \textbf{0,184}              & \textbf{0,202}               \\ \hline
+\end{tabular}
+\end{table}
+\newpage
+\section{\underline{Zhodnotenie triediacich}}
+
+
+    \begin{center}
+        \centerline{\includesvg[inkscapelatex=1, width=1\columnwidth]{Porovnanie rýchlostí algoritmov triedenia.svg}}
+    \end{center}
+
+\end{document}

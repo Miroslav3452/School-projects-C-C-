@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1683043139 source:d:\documants\stumtf\it\zadanie_3\main.cpp
+	<iostream>
+
+1684082823 source:d:\documants\stumtf\it\2.semester\zadanie_3\main.cpp
+	<iostream>
+	<iomanip>
+	<time.h>
+
